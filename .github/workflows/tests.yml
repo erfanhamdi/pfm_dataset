@@ -45,9 +45,6 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -e .
-    - name: Test with pytest
-      run: |
-        pytest -v
     - name: Run tests with pytest
       run: |
         conda init zsh
