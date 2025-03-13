@@ -1,0 +1,7 @@
+numpy==2.2.3
+matplotlib==3.10.1
+fenics-dolfinx==0.8.0
+mpi4py==4.0.3
+h5py==3.13.0
+pyvista==0.43.10
+vtk==9.3.1

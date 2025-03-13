@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "pfm_dataset"
+version = "0.1.0"
+authors = [
+  { name="Erfan Hamdi", email="erfan@bu.edu" },
+  { name="Emma Lejeune", email="elejeune@bu.edu}
+]
+description = "Code to reproduce the PFM dataset for brittle fracture"
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.13"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "numpy==2.2.3",
+    "matplotlib==3.10.1",
+    "fenics-dolfinx==0.8.0",
+    "mpi4py==4.0.3",
+    "h5py==3.13.0",
+    "vtk==9.3.1",
+    "pytest==7.1.2",
+    "pytest-cov==3.0.0"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/erfanhamdi/pfm_dataset"
+"Bug Tracker" = "https://github.com/erfanhamdi/pfm_dataset/issues"
