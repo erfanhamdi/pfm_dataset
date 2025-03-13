@@ -1,4 +1,4 @@
-name: pfm_dataset
+name: pfm-env
 channels:
   - conda-forge
 dependencies:
