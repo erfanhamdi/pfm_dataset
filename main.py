@@ -19,9 +19,9 @@ os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE"  # Disable file locking
 os.environ["HDF5_MPI_OPS_COLLECTIVE"] = "TRUE" # Enable collective operations
 
 parser = argparse.ArgumentParser(description='2D internal cracks')
-parser.add_argument('--seed', type=int, default=162, help='Random seed')
+parser.add_argument('--seed', type=int, default=1, help='Random seed')
 parser.add_argument('--model', type=str, default="miehe", help='Model to use')
-parser.add_argument('--mesh_size', type=int, default=400, help='Mesh size')
+parser.add_argument('--mesh_size', type=int, default=100, help='Mesh size')
 parser.add_argument('--prefix', type=str, default="test", help='Output file')
 parser.add_argument('--sim_case', type=str, default="shear", help='Simulation case')
 parser.add_argument('--job_id', type=int, default=0, help='Job id')
