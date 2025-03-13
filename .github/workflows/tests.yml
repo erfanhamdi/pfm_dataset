@@ -50,4 +50,4 @@ jobs:
         conda init zsh
         source ~/.zshrc
         conda activate pfm-env
-        pytest test/ --disable-warnings
+        pytest tests/ --disable-warnings
