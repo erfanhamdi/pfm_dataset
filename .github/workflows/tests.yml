@@ -6,8 +6,11 @@ name: tests
 # on: [push]
 on:
   push:
-    paths:
-      - '**.py'
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
