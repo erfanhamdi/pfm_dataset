@@ -1,3 +1,7 @@
+[![python](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/)
+![os](https://img.shields.io/badge/os-ubuntu%20-blue.svg)
+![license](https://img.shields.io/badge/license-MIT-green.svg)
+[![tests](https://github.com/erfanhamdi/pfm_dataset/workflows/tests/badge.svg)](https://github.com/erfanhamdi/pfm_dataset/actions) 
 # Phase-field fracture benchmark dataset for solid mechanics
 
 This repository contains the code to reproduce the phase-field fracture benchmark dataset and the verification tests.
