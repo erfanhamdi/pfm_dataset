@@ -1,0 +1,12 @@
+name: pfm_dataset
+channels:
+  - conda-forge
+dependencies:
+  - fenics-dolfinx==0.8.0
+  - mpi4py
+  - numpy
+  - pandas
+  - pyvista
+  - python=3.10
+  - pytest
+  - pip 
