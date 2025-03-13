@@ -7,7 +7,6 @@ import os
 
 from dolfinx import mesh, fem, io, default_scalar_type, log
 from dolfinx.fem.petsc import assemble_matrix, assemble_vector, apply_lifting, set_bc, create_vector, create_matrix
-from dolfinx.io import gmshio, XDMFFile
 from mpi4py import MPI
 from petsc4py import PETSc
 from pathlib import Path
@@ -40,7 +39,7 @@ job_id = args.job_id
 g_c_ = args.g_c
 e_ = args.e_
 domain_size = args.domain_size
-# Start timing
+
 start_time = time.time()
 
 # MPI setup
@@ -52,24 +51,21 @@ if rank == 0:
     print(f"Running on {size} MPI processes")
     print(f"Job id: {job_id}")
 
-# Optimize solver configuration
+# Setting KSP solver and preconditioner
 ksp = PETSc.KSP.Type.GMRES
 pc = PETSc.PC.Type.HYPRE
 rtol = 1e-8
 max_it = 1000
 
-initial_cracks = glob.glob("/projectnb/lejlab2/erfan/pfm_ds/initial_cracks/*.npy")
-# sort the initial crack files based on the final number and add zero to the number if needed
+initial_cracks = glob.glob("./initial_cracks/*.npy")
 initial_cracks = sorted(initial_cracks, key=lambda x: int(x.split("/")[-1].split(".")[0].split("_")[-1]))
 crack_pattern = np.load(initial_cracks[seed])
 seed_val = int(initial_cracks[seed].split("/")[-1].split(".")[0])
 out_file = f"./results/{prefix}/{seed_val}"
 results_folder = Path(out_file)
 
-# Create mesh and partition efficiently
 domain = mesh.create_rectangle(MPI.COMM_WORLD, [np.array([0.0, 0.0]), np.array([domain_size, domain_size])], [mesh_size, mesh_size], cell_type=mesh.CellType.quadrilateral)
 
-# Make sure only rank 0 creates directories to avoid race conditions
 if rank == 0:
     print(f"seed: {seed_val}, out_file = {out_file}", flush=True)
     Path(out_file).mkdir(parents=True, exist_ok=True)
@@ -92,17 +88,16 @@ except RuntimeError as e:
     file_init_success = False
 
 delta_T1 = fem.Constant(domain, 1e-6)
-G_c_ = fem.Constant(domain, g_c_)    # N/mm
-l_0_ = fem.Constant(domain, 0.01)   # mm
-E = fem.Constant(domain, e_)   # MPa
-nu = fem.Constant(domain, 0.3)      # Poisson's ratio
+G_c_ = fem.Constant(domain, g_c_)
+l_0_ = fem.Constant(domain, 0.01)
+E = fem.Constant(domain, e_)
+nu = fem.Constant(domain, 0.3)
 mu = E/(2*(1+nu))
 lmbda = E*nu/((1+nu)*(1-2*nu))
 n = fem.Constant(domain, 3.0)
 Kn = lmbda + 2 * mu / n
 gamma_star = fem.Constant(domain, 5.0)
 
-max_iter = 10
 num_steps = 5000
 save_freq = 50
 if sim_case == "shear":
@@ -195,7 +190,6 @@ else:
     bc_phi_left = fem.dirichletbc(default_scalar_type(0.0), left_phi_dofs, V)
     bc = [bc_bot_y, bc_bot_x, bc_top_y, bc_top_x]
     bc_phi = [bc_phi_top, bc_phi_bot]
-    # bc_phi = []
 
 ds = ufl.Measure("ds", domain=domain, subdomain_data=facet_tag)
 dx = ufl.Measure("dx", domain=domain, metadata={"quadrature_degree": 2})
@@ -213,7 +207,6 @@ def bracket_neg(u):
     return 0.5*(u - np.abs(u))
 
 # Spectral decomposition of the strain tensor
-# Precompute expressions where possible to reduce redundant calculations
 A = ufl.variable(epsilon(u_new))
 I1 = ufl.tr(A)
 delta = (A[0, 0] - A[1, 1])**2 + 4 * A[0, 1] * A[1, 0] + 3.0e-16 ** 2
@@ -246,7 +239,6 @@ def psi_pos_s(u):
 def psi_neg_s(u):
     return (1 + gamma_star) * 0.5 * Kn * bracket_neg(ufl.tr(epsilon(u)))**2
 
-# Cache model selection for better performance
 if model == "miehe":
     psi_pos = psi_pos_m(u_new)
     psi_neg = psi_neg_m(u_new)
@@ -270,7 +262,6 @@ def H_init(dist_list, l_0, G_c):
     H[mask0] = ((phi_c/(1-phi_c))*G_c.value/(2*l_0.value))*(1-(2*distances[mask0]/l_0.value))
     return H
 
-# Optimize crack initialization - each rank computes only its portion of the domain
 A_ = crack_pattern[:, 0, :]/(2/domain_size)
 B_ = crack_pattern[:, 1, :]/(2/domain_size)
 points = domain.geometry.x[:, :2]
@@ -291,7 +282,6 @@ L_u = fem.form(ufl.rhs(E_du))
 A_u = create_matrix(a_u)
 b_u = create_vector(L_u)
 
-# Configure solvers with better parameters for MPI performance
 solver_u = PETSc.KSP().create(domain.comm)
 solver_u.setOperators(A_u)
 solver_u.setType(ksp)
@@ -311,7 +301,7 @@ solver_phi.setType(ksp)
 solver_phi.getPC().setType(pc)
 solver_phi.setTolerances(rtol=rtol, max_it=max_it)
 solver_phi.setFromOptions()
-# Pre-compile forms for better performance
+
 u_l2_error = fem.form(ufl.dot(u_new - u_old, u_new - u_old)*dx)
 p_l2_error = fem.form(ufl.dot(p_new - p_old, p_new - p_old)*dx)
 
@@ -342,7 +332,6 @@ if sim_case == "tension":
 else:
     u_bc_bot.sub(0).interpolate(one)
 
-# Pre-compile conditional expressions
 H_expr = fem.Expression(ufl.conditional(ufl.gt(psi_pos, H_old), psi_pos, H_old), VV.element.interpolation_points())
 
 ################################# main simulation loop ###############################################
@@ -350,7 +339,6 @@ delta_T = delta_T1
 error_tol = fem.Constant(domain, 1e-4)
 error_total = fem.Constant(domain, 1.0)
 
-# Arrays to store reaction forces during simulation
 reaction_forces_bot = np.zeros(num_steps+1)
 if sim_case == "tension":
     reaction_forces_left = np.zeros(num_steps+1)
@@ -363,7 +351,6 @@ for i in range(num_steps+1):
     u_bc_right.value = t_.value
     error_total.value = 1.0
     
-    # Staggered iteration loop
     while flag:
         staggered_iter +=1
         if error_total.value < error_tol.value:
@@ -401,7 +388,6 @@ for i in range(num_steps+1):
         H_old.interpolate(H_expr)
         if rank == 0:
             print(f"step = {i}, error_total = {error_total.value}")
-        # comm.Barrier()
     ################################################################################
     if sim_case == "tension":
         v_reac.vector.set(0.0)
@@ -426,7 +412,6 @@ for i in range(num_steps+1):
         else:
             B_bot.append([np.sum(R_bot), i * delta_T.value])
 
-    # Save results at specified intervals
     if i % save_freq == 0:
         out_file_name.write_function(p_new, i * delta_T.value)
         out_file_name_u.write_function(u_new, i * delta_T.value)
@@ -438,11 +423,9 @@ for i in range(num_steps+1):
             if sim_case == "tension":
                 plot_force_disp(B_left, "left_rxn", out_file)
 
-# Calculate and report total simulation time
 end_time = time.time()
 total_time = end_time - start_time
 
-# Clean up file objects if they were successfully initialized
 out_file_name.close()
 out_file_name_u.close()
 if rank == 0:
