@@ -7,8 +7,7 @@ build-backend = "setuptools.build_meta"
 name = "pfm_dataset"
 version = "0.1.0"
 authors = [
-  { name="Erfan Hamdi", email="erfan@bu.edu" },
-  { name="Emma Lejeune", email="elejeune@bu.edu}
+  { name="Erfan Hamdi", email="erfan@bu.edu" }
 ]
 description = "Code to reproduce the PFM dataset for brittle fracture"
 readme = "README.md"
