@@ -6,7 +6,7 @@
 
 This repository contains the code to reproduce the phase-field fracture benchmark dataset and the verification tests.
 
-![dataset](Figs/github_readme_smooth.gif)
+![dataset](Figs/github_readme.gif)
 
 
 ## Installation
