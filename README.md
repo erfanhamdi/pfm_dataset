@@ -14,9 +14,13 @@ This repository contains the code to reproduce the phase-field fracture benchmar
 * Clone the repository and create a conda environment from the environment.yml file
 ```bash
 git clone https://github.com/erfanhamdi/pfm_dataset.git
+
 cd pfm_dataset
+
 conda env create --file environment.yml 
+
 conda activate pfm-env
+
 pip install -e .
 ```
 ## Usage
