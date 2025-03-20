@@ -34,11 +34,18 @@ pip install -e .
     ```bash
     singularity shell pfm_dataset.sif
     ```
-    3. test to check if the all the dependencies are installed correctly
+    3. clone the repository if needed and install the dependencies
+    ```bash
+    git clone https://github.com/erfanhamdi/pfm_dataset.git
+    cd pfm_dataset
+    pip install -e .
+    pip install -r requirements.txt
+    ```
+    4. run the tests to check if the all the dependencies are installed correctly
     ```bash
     pytest
     ```
-    4. Run the main script to generate the dataset
+    5. Run the main script to generate the dataset
     ```bash
     python3 src/main.py
     ```
