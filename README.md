@@ -24,9 +24,21 @@ conda activate pfm-env
 pip install -e .
 ```
 ## Usage
-* Run the main script to generate the dataset
-```bash
-python src/main.py
-```
-
+* You can use the singularity container to run the code, to do that:
+    1. Build the container
+    ```bash
+    singularity build --fakeroot pfm_dataset.sif pfm_dataset.def
+    ```
+    2. Shell into the container
+    ```bash
+    singularity shell pfm_dataset.sif
+    ```
+    3. test to check if the all the dependencies are installed correctly
+    ```bash
+    pytest
+    ```
+    4. Run the main script to generate the dataset
+    ```bash
+    python src/main.py
+    ```
 ## License
