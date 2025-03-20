@@ -24,6 +24,7 @@ conda activate pfm-env
 pip install -e .
 ```
 ## Usage
+### With singularity container
 * You can use the singularity container to run the code, to do that:
     1. Build the container
     ```bash
@@ -41,4 +42,9 @@ pip install -e .
     ```bash
     python src/main.py
     ```
+### Without singularity container
+* Run the main script to generate the dataset
+```bash
+python src/main.py
+```
 ## License
