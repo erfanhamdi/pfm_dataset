@@ -45,6 +45,6 @@ pip install -e .
 ### Without singularity container
 * Run the main script to generate the dataset
 ```bash
-python src/main.py
+python3 src/main.py
 ```
 ## License
