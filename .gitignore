@@ -1,3 +1,4 @@
 results/
 __pycache__/
 src/pfm_dataset.egg-info/
+*.png

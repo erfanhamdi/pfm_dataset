@@ -103,7 +103,8 @@ gamma_star = fem.Constant(domain, 5.0)
 num_steps = args.num_steps
 save_freq = 50
 if sim_case == "shear":
-    num_steps = 10000
+    # num_steps = 10000
+    num_steps = args.num_steps
     save_freq = 100
 t_ = fem.Constant(domain, 0.0)
 
