@@ -40,7 +40,7 @@ pip install -e .
     ```
     4. Run the main script to generate the dataset
     ```bash
-    python src/main.py
+    python3 src/main.py
     ```
 ### Without singularity container
 * Run the main script to generate the dataset
