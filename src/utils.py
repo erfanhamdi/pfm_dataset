@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from dolfinx import plot
 import pyvista as pv
-# pv.start_xvfb()
+pv.start_xvfb()
 
 def plotter_func(u=None, dim=2, mesh=None, title="", colorbar=False):
     V = u.ufl_function_space()
