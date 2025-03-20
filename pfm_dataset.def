@@ -1,0 +1,11 @@
+Bootstrap: docker
+From: dolfinx/dolfinx:v0.8.0
+%post
+	apt-get -y update
+	apt-get install -y gcc g++ make build-essential
+	git clone https://github.com/erfanhamdi/pfm_dataset.git
+	cd pfm_dataset
+	pip install -e .
+	pip install -r requirements.txt
+%environment
+	export CC=gcc
