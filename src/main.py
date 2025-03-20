@@ -28,6 +28,7 @@ parser.add_argument('--job_id', type=int, default=0, help='Job id')
 parser.add_argument('--g_c', type=float, default=1.0, help='G_c')
 parser.add_argument('--e_', type=float, default=1000.0e3, help='E')
 parser.add_argument('--domain_size', type=float, default=2.0, help='Domain size')
+parser.add_argument('--num_steps', type=int, default=5000, help='Number of time steps')
 args = parser.parse_args()
 
 seed = args.seed - 1
@@ -98,7 +99,8 @@ n = fem.Constant(domain, 3.0)
 Kn = lmbda + 2 * mu / n
 gamma_star = fem.Constant(domain, 5.0)
 
-num_steps = 5000
+# num_steps = 5000
+num_steps = args.num_steps
 save_freq = 50
 if sim_case == "shear":
     num_steps = 10000
