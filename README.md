@@ -54,4 +54,16 @@ pip install -e .
 ```bash
 python3 src/main.py
 ```
-## License
+## Citation
+If you use this code or the datasets in your research, please cite:
+```
+@misc{hamdi2025robust,
+      title={Towards Robust Surrogate Models: Benchmarking Machine Learning Approaches to Expediting Phase Field Simulations of Brittle Fracture}, 
+      author={Erfan Hamdi and Emma Lejeune},
+      year={2025},
+      eprint={2507.07237},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2507.07237}, 
+}
+```
