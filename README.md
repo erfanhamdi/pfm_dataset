@@ -11,6 +11,7 @@ This repository contains the code to reproduce the phase-field fracture benchmar
 
 
 ## Installation
+* This code is compatible with FEniCSx 0.8.0
 * Clone the repository and create a conda environment from the environment.yml file
 ```bash
 git clone https://github.com/erfanhamdi/pfm_dataset.git
