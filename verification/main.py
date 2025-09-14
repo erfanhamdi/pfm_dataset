@@ -337,6 +337,8 @@ for i in range(num_steps+1):
     t_.value += delta_T.value
     t_keeper += delta_T.value
     u_bc_top.value = t_.value
+    if case=="internal":
+        u_bc_bot_.value = -t_.value
     error_total.value = 1.0
     flag = 1
     staggered_iter = 0
